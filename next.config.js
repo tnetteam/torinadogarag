@@ -82,6 +82,15 @@ const nextConfig = {
     scrollRestoration: true,
   },
 
+  // Force static generation for better Vercel compatibility
+  output: 'standalone',
+  
+  // Disable dynamic server usage warnings
+  onDemandEntries: {
+    maxInactiveAge: 25 * 1000,
+    pagesBufferLength: 2,
+  },
+
   // Webpack optimizations
   webpack: (config, { dev, isServer }) => {
     // Optimize bundle size
