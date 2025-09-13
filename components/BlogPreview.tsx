@@ -3,7 +3,7 @@
 import { Calendar, User, ArrowLeft, Eye } from 'lucide-react'
 import Link from 'next/link'
 import { useState, useEffect, useCallback } from 'react'
-import { CardImage } from './OptimizedImage'
+// import { CardImage } from './OptimizedImage' // حذف شد
 
 interface BlogPost {
   id: number

@@ -25,7 +25,7 @@ interface BlogPost {
   date?: string
 }
 import Link from 'next/link'
-import Image from 'next/image'
+// import Image from 'next/image' // حذف شد
 import { Calendar, User, Eye, ArrowLeft, Clock } from 'lucide-react'
 
 export async function generateStaticParams() {

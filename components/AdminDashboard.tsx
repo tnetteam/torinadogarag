@@ -524,35 +524,35 @@ export default function AdminDashboard() {
     }
   }
 
-  const handlePostImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file) {
-      // Check file type
-      if (!file.type.startsWith('image/')) {
-        alert('لطفاً فقط فایل‌های تصویری انتخاب کنید')
-        return
-      }
+  // const handlePostImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0]
+  //   if (file) {
+  //     // Check file type
+  //     if (!file.type.startsWith('image/')) {
+  //       alert('لطفاً فقط فایل‌های تصویری انتخاب کنید')
+  //       return
+  //     }
       
-      // Check file size (max 5MB)
-      if (file.size > 5 * 1024 * 1024) {
-        alert('حجم فایل نباید بیشتر از 5 مگابایت باشد')
-        return
-      }
+  //     // Check file size (max 5MB)
+  //     if (file.size > 5 * 1024 * 1024) {
+  //       alert('حجم فایل نباید بیشتر از 5 مگابایت باشد')
+  //       return
+  //     }
 
-      setNewPost({...newPost, image: file})
+  //     setNewPost({...newPost, image: file})
       
-      // Create preview
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        setNewPost(prev => ({...prev, imagePreview: e.target?.result as string}))
-      }
-      reader.readAsDataURL(file)
-    }
-  }
+  //     // Create preview
+  //     const reader = new FileReader()
+  //     reader.onload = (e) => {
+  //       setNewPost(prev => ({...prev, imagePreview: e.target?.result as string}))
+  //     }
+  //     reader.readAsDataURL(file)
+  //   }
+  // }
 
-  const removePostImage = () => {
-    setNewPost({...newPost, image: null, imagePreview: ''})
-  }
+  // const removePostImage = () => {
+  //   setNewPost({...newPost, image: null, imagePreview: ''})
+  // }
 
 
 

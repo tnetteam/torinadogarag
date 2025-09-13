@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import Image from 'next/image'
+// import Image from 'next/image' // حذف شد
 import fs from 'fs'
 import path from 'path'
 
