@@ -866,6 +866,7 @@ export default function AdminDashboard() {
               title: result.data.title,
               content: result.data.content,
               excerpt: result.data.excerpt,
+              author: result.data.author || 'ادمین',
               category: result.data.category,
               tags: result.data.tags.join(', '),
               status: result.data.status,
