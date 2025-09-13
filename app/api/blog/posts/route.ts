@@ -43,7 +43,7 @@ if (!fs.existsSync(BLOG_POSTS_FILE_PATH)) {
       status: "published",
       views: 0,
       likes: 0,
-      image: "/images/blog-placeholder.jpg",
+      image: "",
       imageAlt: "نگهداری خودروهای آلمانی",
       slug: "german-cars-maintenance",
       seoTitle: "نگهداری خودروهای آلمانی - نکات مهم",
