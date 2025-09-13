@@ -1,0 +1,2 @@
+# This directory is for uploaded blog images
+# In a real project, uploaded images would be stored here

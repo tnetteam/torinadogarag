@@ -1,0 +1,8 @@
+{
+  "apiKey": "AIzaSyC1rGZPknmjhPkyz_DjpWHoy5sDGUsFNv4",
+  "model": "gemini-pro",
+  "maxTokens": 2000,
+  "temperature": 0.7,
+  "enabled": true,
+  "lastUpdate": "2025-09-13T09:04:47.554Z"
+}

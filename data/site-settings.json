@@ -1,0 +1,46 @@
+{
+  "site": {
+    "name": "گاراژ تخصصی مکانیکی",
+    "url": "https://garage-website.ir",
+    "description": "گاراژ تخصصی مکانیکی با بیش از 15 سال تجربه در تعمیر خودروهای آلمانی و چینی",
+    "keywords": [
+      "تعمیر خودرو",
+      "مکانیک",
+      "خودرو آلمانی",
+      "خودرو چینی",
+      "گاراژ",
+      "تعمیر موتور",
+      "گیربکس",
+      "سیستم برقی",
+      "سیستم ترمز",
+      "نگهداری خودرو"
+    ],
+    "author": "گاراژ تخصصی مکانیکی",
+    "language": "fa",
+    "direction": "rtl"
+  },
+  "contact": {
+    "phone": "021-12345678",
+    "mobile": "0912-345-6789",
+    "email": "info@garage-website.ir",
+    "address": "تهران، خیابان ولیعصر، پلاک 123",
+    "workingHours": "شنبه تا پنج‌شنبه: 8:00 - 18:00، جمعه: 8:00 - 14:00"
+  },
+  "social": {
+    "instagram": "https://instagram.com/garage_website",
+    "facebook": "https://facebook.com/garage_website",
+    "twitter": "https://twitter.com/garage_website",
+    "linkedin": "https://linkedin.com/company/garage_website"
+  },
+  "features": {
+    "blog": true,
+    "gallery": true,
+    "contactForm": true,
+    "adminPanel": true,
+    "autoBlogGeneration": true
+  },
+  "analytics": {
+    "googleAnalyticsId": "G-XXXXXXXXXX",
+    "googleSearchConsole": "your_verification_code"
+  }
+}

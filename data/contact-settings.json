@@ -1,0 +1,26 @@
+{
+  "companyInfo": {
+    "name": "تورنادو",
+    "subtitle": "گاراژ تخصصی مکانیکی",
+    "description": "با بیش از 15 سال تجربه در تعمیر خودروهای آلمانی و چینی، خدمات مکانیکی با کیفیت و قابل اعتماد ارائه می‌دهیم."
+  },
+  "contactInfo": {
+    "phone": "021000000",
+    "mobile": "09126977639",
+    "email": "info@garage-website.ir",
+    "address": "تهران، خیابان ولیعصر، پلاک 123",
+    "workingHours": "شنبه تا پنج‌شنبه: 9:00 - 18:00"
+  },
+  "socialMedia": {
+    "instagram": "instagram.com/arad.mdd",
+    "telegram": "",
+    "whatsapp": "",
+    "linkedin": ""
+  },
+  "mapSettings": {
+    "latitude": 35.7219,
+    "longitude": 51.3347,
+    "zoom": 15
+  },
+  "updatedAt": "2025-09-11T15:59:20.773Z"
+}

@@ -1,0 +1,39 @@
+{
+  "name": "garage-website",
+  "version": "1.0.0",
+  "description": "Professional Garage Website with Auto Blog System",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "export": "next build && next export",
+    "lint": "next lint",
+    "setup": "node scripts/setup.js",
+    "convert-webp": "node scripts/convert-to-webp.js",
+    "optimize-images": "npm run convert-webp"
+  },
+  "dependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "autoprefixer": "^10.4.0",
+    "axios": "^1.6.0",
+    "critters": "^0.0.23",
+    "date-fns": "^2.30.0",
+    "framer-motion": "^10.16.0",
+    "lucide-react": "^0.292.0",
+    "next": "^14.0.0",
+    "postcss": "^8.4.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.47.0",
+    "sharp": "^0.32.6",
+    "tailwindcss": "^3.3.0",
+    "typescript": "^5.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "eslint-config-next": "^14.0.0"
+  }
+}

@@ -1,0 +1,17 @@
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="600" fill="#1a1a1a"/>
+  <rect x="50" y="100" width="700" height="400" fill="#2a2a2a" rx="20"/>
+  <rect x="100" y="150" width="600" height="300" fill="#3a3a3a" rx="15"/>
+  <rect x="150" y="200" width="80" height="200" fill="#4a4a4a" rx="10"/>
+  <rect x="250" y="200" width="80" height="200" fill="#4a4a4a" rx="10"/>
+  <rect x="350" y="200" width="80" height="200" fill="#4a4a4a" rx="10"/>
+  <rect x="450" y="200" width="80" height="200" fill="#4a4a4a" rx="10"/>
+  <rect x="550" y="200" width="80" height="200" fill="#4a4a4a" rx="10"/>
+  <circle cx="190" cy="300" r="20" fill="#f97316"/>
+  <circle cx="290" cy="300" r="20" fill="#f97316"/>
+  <circle cx="390" cy="300" r="20" fill="#f97316"/>
+  <circle cx="490" cy="300" r="20" fill="#f97316"/>
+  <circle cx="590" cy="300" r="20" fill="#f97316"/>
+  <rect x="200" y="450" width="400" height="30" fill="#5a5a5a" rx="15"/>
+  <text x="400" y="470" text-anchor="middle" fill="#ffffff" font-family="Arial" font-size="16">گاراژ مدرن و مجهز</text>
+</svg>

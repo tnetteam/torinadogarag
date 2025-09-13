@@ -1,0 +1,13 @@
+<svg width="400" height="300" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#1a1a1a"/>
+  <rect x="50" y="50" width="300" height="200" fill="#2a2a2a" rx="15"/>
+  <rect x="80" y="80" width="240" height="140" fill="#3a3a3a" rx="10"/>
+  <rect x="100" y="100" width="200" height="100" fill="#4a4a4a" rx="10"/>
+  <rect x="120" y="120" width="160" height="60" fill="#5a5a5a" rx="5"/>
+  <rect x="130" y="130" width="140" height="40" fill="#6a6a6a" rx="5"/>
+  <circle cx="150" cy="150" r="8" fill="#f97316"/>
+  <circle cx="200" cy="150" r="8" fill="#f97316"/>
+  <circle cx="250" cy="150" r="8" fill="#f97316"/>
+  <rect x="120" y="200" width="160" height="10" fill="#6a6a6a" rx="5"/>
+  <text x="200" y="250" text-anchor="middle" fill="#ffffff" font-family="Arial" font-size="14">تعمیر گیربکس</text>
+</svg>

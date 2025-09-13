@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api
+Disallow: /_next
+Disallow: /static
+
+Sitemap: https://garage-website.ir/sitemap.xml
+
+# Crawl-delay for better server performance
+Crawl-delay: 1

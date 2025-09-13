@@ -1,0 +1,18 @@
+<svg width="400" height="300" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#1a1a1a"/>
+  <rect x="50" y="50" width="300" height="200" fill="#2a2a2a" rx="15"/>
+  <rect x="80" y="80" width="240" height="140" fill="#3a3a3a" rx="10"/>
+  <rect x="100" y="100" width="200" height="100" fill="#4a4a4a" rx="10"/>
+  <rect x="120" y="120" width="160" height="60" fill="#5a5a5a" rx="5"/>
+  <rect x="130" y="130" width="20" height="40" fill="#6a6a6a" rx="3"/>
+  <rect x="160" y="130" width="20" height="40" fill="#6a6a6a" rx="3"/>
+  <rect x="190" y="130" width="20" height="40" fill="#6a6a6a" rx="3"/>
+  <rect x="220" y="130" width="20" height="40" fill="#6a6a6a" rx="3"/>
+  <rect x="250" y="130" width="20" height="40" fill="#6a6a6a" rx="3"/>
+  <circle cx="140" cy="150" r="5" fill="#f97316"/>
+  <circle cx="170" cy="150" r="5" fill="#f97316"/>
+  <circle cx="200" cy="150" r="5" fill="#f97316"/>
+  <circle cx="230" cy="150" r="5" fill="#f97316"/>
+  <circle cx="260" cy="150" r="5" fill="#f97316"/>
+  <text x="200" y="250" text-anchor="middle" fill="#ffffff" font-family="Arial" font-size="14">سیستم برقی</text>
+</svg>
