@@ -1,5 +1,7 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import fs from 'fs'
+import path from 'path'
 
 interface BlogPost {
   id: number
@@ -29,9 +31,6 @@ import { Calendar, User, Eye, ArrowLeft, Clock } from 'lucide-react'
 export async function generateStaticParams() {
   // در build time، از فایل JSON مستقیماً بخوانیم
   try {
-    const fs = require('fs')
-    const path = require('path')
-    
     const blogPostsPath = path.join(process.cwd(), 'data', 'blog-posts.json')
     if (fs.existsSync(blogPostsPath)) {
       const data = fs.readFileSync(blogPostsPath, 'utf8')
@@ -73,9 +72,6 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 
 async function getBlogPost(id: string) {
   try {
-    const fs = require('fs')
-    const path = require('path')
-    
     const blogPostsPath = path.join(process.cwd(), 'data', 'blog-posts.json')
     if (fs.existsSync(blogPostsPath)) {
       const data = fs.readFileSync(blogPostsPath, 'utf8')
