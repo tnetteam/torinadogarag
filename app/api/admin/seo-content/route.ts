@@ -4,6 +4,8 @@ import { TARGET_KEYWORDS } from '@/lib/seo-optimizer'
 import fs from 'fs'
 import path from 'path'
 
+export const dynamic = 'force-dynamic'
+
 interface BlogPost {
   id: number
   title: string

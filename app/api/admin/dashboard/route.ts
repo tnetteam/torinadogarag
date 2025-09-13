@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { readFileSync, existsSync } from 'fs'
 import { join } from 'path'
 
+export const dynamic = 'force-dynamic'
+
 interface BlogPost {
   id: number
   title: string
