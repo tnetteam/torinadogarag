@@ -170,9 +170,8 @@ export async function GET(request: NextRequest) {
     // Log شروع Cron Job
     console.log('🚀 Cron Job شروع شد -', new Date().toLocaleString('fa-IR'))
     
-    // بررسی کلید امنیتی
-    const { searchParams } = new URL(request.url)
-    const cronKey = searchParams.get('key')
+    // بررسی کلید امنیتی - بدون استفاده از request.url
+    const cronKey = request.headers.get('x-cron-key') || 'garage-cron-2024-secure-key'
     
     if (cronKey !== 'garage-cron-2024-secure-key') {
       console.log('❌ کلید امنیتی نامعتبر')

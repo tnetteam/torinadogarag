@@ -6,7 +6,7 @@
   },
   "crons": [
     {
-      "path": "/api/cron/generate-content?key=garage-cron-2024-secure-key",
+      "path": "/api/cron/generate-content",
       "schedule": "0 9,15,21 * * *"
     }
   ]
