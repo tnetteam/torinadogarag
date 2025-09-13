@@ -100,9 +100,10 @@ export default function BlogPreview() {
         ) : blogPosts.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {blogPosts.map((post, index) => (
-            <article
+            <Link
               key={post.id}
-              className="glass-card-dark overflow-hidden group hover:scale-105 transition-all duration-500"
+              href={`/blog/${post.id}`}
+              className="glass-card-dark overflow-hidden group hover:scale-105 transition-all duration-500 block"
               style={{
                 animationDelay: `${index * 0.1}s`
               }}
@@ -122,7 +123,6 @@ export default function BlogPreview() {
                     <ArrowLeft className="w-6 h-6" />
                   </button>
                 </div>
-              </div>
 
               {/* Content */}
               <div className="p-6">
@@ -158,15 +158,12 @@ export default function BlogPreview() {
                 </div>
 
                 {/* Read More */}
-                <Link
-                  href={`/blog/${post.id}`}
-                  className="text-primary-500 hover:text-primary-400 font-semibold text-sm flex items-center group-hover:mr-2 transition-all duration-300"
-                >
+                <div className="text-primary-500 hover:text-primary-400 font-semibold text-sm flex items-center group-hover:mr-2 transition-all duration-300">
                   ادامه مطلب
                   <ArrowLeft className="w-4 h-4 mr-2 group-hover:mr-0 transition-all duration-300" />
-                </Link>
+                </div>
               </div>
-            </article>
+            </Link>
             ))}
           </div>
         ) : (
