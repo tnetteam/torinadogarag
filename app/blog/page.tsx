@@ -68,18 +68,7 @@ export default async function BlogPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {blogPosts.map((post: BlogPost) => (
               <article key={post.id} className="glass-card-dark overflow-hidden group hover:scale-105 transition-all duration-300">
-                {/* Image */}
-                {post.image && (
-                  <div className="relative h-48 overflow-hidden">
-                    <Image
-                      src={post.image}
-                      alt={post.title}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-300"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                  </div>
-                )}
+                {/* تصاویر حذف شدند */}
                 
                 {/* Content */}
                 <div className="p-6">

@@ -9,6 +9,7 @@ import PerformanceMonitor from '@/components/PerformanceMonitor'
 import SpeedOptimizer from '@/components/SpeedOptimizer'
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   title: 'تورنادو | گاراژ تخصصی مکانیکی | تعمیر خودروهای آلمانی و چینی',
   description: 'گاراژ تخصصی مکانیکی تورنادو با بیش از 15 سال تجربه در تعمیر خودروهای آلمانی و چینی. خدمات مکانیکی، تعمیر موتور، گیربکس و سیستم برقی.',
   keywords: [

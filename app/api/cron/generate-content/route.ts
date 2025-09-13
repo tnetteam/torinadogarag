@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
 
+export const dynamic = 'force-dynamic'
+
 
 interface BlogPost {
   id: number
@@ -58,15 +60,9 @@ function writeCronSettings(settings: Record<string, unknown>) {
 }
 
 // تولید تصویر
-async function generateImage(): Promise<string> {
-  try {
-    const imageId = Date.now()
-    const imageUrl = `/images/ai-generated/auto-${imageId}.jpg`
-    return imageUrl
-  } catch (error) {
-    console.error('Error generating image:', error)
-    return '/images/placeholder.jpg'
-  }
+async function generateImage(topic: string): Promise<string> {
+  // تصاویر حذف شدند - فقط placeholder
+  return '/images/placeholder.jpg'
 }
 
 
@@ -85,7 +81,7 @@ async function generateBlogPostWithAI(): Promise<BlogPost> {
     ]
     
     const randomTopic = topics[Math.floor(Math.random() * topics.length)]
-    const image = await generateImage()
+    const image = await generateImage(randomTopic)
     
     const blogPost: BlogPost = {
       id: Date.now(),

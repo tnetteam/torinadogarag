@@ -12,6 +12,26 @@ const nextConfig = {
     minimumCacheTTL: 60,
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'source.unsplash.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'unsplash.com',
+        port: '',
+        pathname: '/**',
+      }
+    ],
   },
 
   // Headers for SEO and security
@@ -82,8 +102,8 @@ const nextConfig = {
     scrollRestoration: true,
   },
 
-  // Force static generation for better Vercel compatibility
-  output: 'standalone',
+  // Force static generation for better Vercel compatibility (only in production)
+  ...(process.env.NODE_ENV === 'production' && { output: 'standalone' }),
   
   // Disable dynamic server usage warnings
   onDemandEntries: {

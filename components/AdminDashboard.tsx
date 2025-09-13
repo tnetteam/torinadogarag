@@ -860,6 +860,19 @@ export default function AdminDashboard() {
       if (response.ok) {
         const result = await response.json()
         if (result.success) {
+          // نمایش مقاله تولید شده در فرم
+          if (result.data) {
+            setNewPost({
+              title: result.data.title,
+              content: result.data.content,
+              excerpt: result.data.excerpt,
+              category: result.data.category,
+              tags: result.data.tags.join(', '),
+              status: result.data.status,
+              image: null,
+              imagePreview: result.data.image
+            })
+          }
           alert(result.message)
           await fetchAiContentStats()
         } else {
@@ -2029,51 +2042,7 @@ export default function AdminDashboard() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      تصویر مقاله
-                    </label>
-                    <div className="space-y-4">
-                      {newPost.imagePreview ? (
-                        <div className="relative">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img 
-                            src={newPost.imagePreview} 
-                            alt="پیش‌نمایش تصویر" 
-                            className="w-full h-48 object-cover rounded-lg border border-white/20"
-                          />
-                          <button
-                            onClick={removePostImage}
-                            className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-2 transition-colors"
-                            title="حذف تصویر"
-                          >
-                            <X className="w-4 h-4" />
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="border-2 border-dashed border-white/30 rounded-lg p-8 text-center">
-                          <div className="space-y-4">
-                            <div className="mx-auto w-12 h-12 bg-primary-500/20 rounded-full flex items-center justify-center">
-                              <Image className="w-6 h-6 text-primary-500" aria-hidden="true" />
-                            </div>
-                            <div>
-                              <p className="text-gray-300 mb-2">تصویر مقاله را آپلود کنید</p>
-                              <p className="text-sm text-gray-400">فرمت‌های مجاز: JPG, PNG, GIF (حداکثر 5MB)</p>
-                            </div>
-                            <label className="inline-block">
-                              <span className="btn-primary cursor-pointer">
-                                انتخاب تصویر
-                              </span>
-                              <input
-                                type="file"
-                                accept="image/*"
-                                onChange={handlePostImageUpload}
-                                className="hidden"
-                              />
-                            </label>
-                          </div>
-                        </div>
-                      )}
-                    </div>
+                    {/* تصاویر حذف شدند */}
                   </div>
 
                   <div>

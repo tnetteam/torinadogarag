@@ -170,19 +170,7 @@ export default async function BlogPostPage({ params }: { params: { id: string } 
             )}
           </header>
 
-          {/* Featured Image */}
-          {post.image && (
-            <div className="mb-12">
-              <div className="relative h-64 md:h-96 rounded-xl overflow-hidden">
-                <Image
-                  src={post.image}
-                  alt={post.title}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            </div>
-          )}
+          {/* تصاویر حذف شدند */}
 
           {/* Article Content */}
           <div className="prose prose-lg prose-invert max-w-none">

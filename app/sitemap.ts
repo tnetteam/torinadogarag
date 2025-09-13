@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://tornado-garage.ir'
+  const baseUrl = 'https://www.tornadogarage.ir'
   const currentDate = new Date()
 
   // Static pages with SEO optimization

@@ -63,9 +63,8 @@ ${request.keyword} یکی از مهم‌ترین بخش‌های خودرو اس
 }
 
 // تولید تصویر با Gemini
-export async function generateImageWithGemini(): Promise<string> {
-  // برای حالا یک تصویر placeholder برمی‌گردانیم
-  // در آینده می‌توان با Gemini Vision یا سرویس دیگری جایگزین کرد
+export async function generateImageWithGemini(topic?: string): Promise<string> {
+  // تصاویر حذف شدند - فقط placeholder
   return '/images/placeholder.jpg'
 }
 
@@ -79,7 +78,7 @@ export async function generateCompleteContent(
     const content = await generateContentWithGemini(request, geminiApiKey)
     
     // تولید تصویر
-    const image = await generateImageWithGemini()
+    const image = await generateImageWithGemini(request.keyword)
     
     // تولید excerpt
     const excerpt = content.substring(0, 200) + '...'

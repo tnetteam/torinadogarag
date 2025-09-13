@@ -3,5 +3,11 @@
     "app/api/**/*.ts": {
       "maxDuration": 30
     }
-  }
+  },
+  "crons": [
+    {
+      "path": "/api/cron/generate-content?key=garage-cron-2024-secure-key",
+      "schedule": "0 9,15,21 * * *"
+    }
+  ]
 }
