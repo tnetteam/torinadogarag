@@ -3334,11 +3334,11 @@ export default function AdminDashboard() {
                       placeholder="رمز عبور جدید را مجدداً وارد کنید"
                       className="w-full px-4 py-3 bg-dark-800 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                     />
-                  </div>
+                </div>
                   <button className="btn-primary">
-                    <Save className="w-5 h-5 ml-2" />
+                  <Save className="w-5 h-5 ml-2" />
                     تغییر رمز عبور
-                  </button>
+                </button>
                 </div>
               </div>
 
@@ -3832,7 +3832,7 @@ export default function AdminDashboard() {
                           {hour}:00
                         </span>
                       ))}
-                    </div>
+                  </div>
                   </div>
                   <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4">
                     <h4 className="text-green-400 font-semibold mb-2">✅ Vercel Cron فعال است!</h4>

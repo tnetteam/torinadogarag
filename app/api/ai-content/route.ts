@@ -126,8 +126,8 @@ export async function GET() {
       post.createdAt.split('T')[0] === today
     )
 
-    return NextResponse.json({
-      success: true,
+        return NextResponse.json({
+          success: true,
       data: {
         totalBlogPosts: blogPosts.length,
         todayBlogPosts: todayPosts.length,
@@ -136,11 +136,11 @@ export async function GET() {
     })
   } catch (error) {
     console.error('Error fetching AI content stats:', error)
-    return NextResponse.json({
-      success: false,
+        return NextResponse.json({ 
+          success: false, 
       message: 'خطا در دریافت آمار محتوا'
-    }, { status: 500 })
-  }
+        }, { status: 500 })
+      }
 }
 
 // POST - تولید محتوا
@@ -164,17 +164,17 @@ export async function POST(request: NextRequest) {
           data: newBlogPost
         })
       } else {
-        return NextResponse.json({
-          success: false,
-          message: 'خطا در ذخیره مقاله'
+        return NextResponse.json({ 
+          success: false, 
+          message: 'خطا در ذخیره مقاله' 
         }, { status: 500 })
       }
     }
 
-    return NextResponse.json({
-      success: false,
-      message: 'عملیات نامعتبر'
-    }, { status: 400 })
+      return NextResponse.json({ 
+        success: false, 
+        message: 'عملیات نامعتبر' 
+      }, { status: 400 })
   } catch (error) {
     console.error('Error in AI content generation:', error)
     return NextResponse.json({
