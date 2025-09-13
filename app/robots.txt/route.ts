@@ -1,11 +1,12 @@
 import { NextResponse } from 'next/server'
 
 export async function GET() {
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://your-domain.vercel.app'
   const robotsTxt = `User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: http://localhost:3000/sitemap
+Sitemap: ${baseUrl}/sitemap
 
 # Disallow admin panel
 Disallow: /admin/

@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from 'path'
 
 export async function GET() {
-  const baseUrl = 'http://localhost:3000' // در production باید به دامنه واقعی تغییر دهید
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://your-domain.vercel.app'
   
   try {
     // خواندن داده‌های سرویس‌ها

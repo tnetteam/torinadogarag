@@ -1,6 +1,8 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
+import fs from 'fs'
+import path from 'path'
 
 interface BlogPost {
   id: number
@@ -32,18 +34,11 @@ export const metadata: Metadata = {
 
 async function getBlogPosts() {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/admin/blog`, {
-      headers: {
-        'Authorization': 'Bearer garage-admin-2024-secure-key-12345'
-      },
-      cache: 'no-store' // Always get fresh data
-    })
-    
-    if (response.ok) {
-      const result = await response.json()
-      if (result.success) {
-        return result.data.filter((post: BlogPost) => post.status === 'published')
-      }
+    const blogPostsPath = path.join(process.cwd(), 'data', 'blog-posts.json')
+    if (fs.existsSync(blogPostsPath)) {
+      const data = fs.readFileSync(blogPostsPath, 'utf8')
+      const posts = JSON.parse(data)
+      return posts.filter((post: BlogPost) => post.status === 'published')
     }
   } catch (error) {
     console.error('Error fetching blog posts:', error)
