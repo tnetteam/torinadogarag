@@ -60,7 +60,7 @@ function writeCronSettings(settings: Record<string, unknown>) {
 }
 
 // تولید تصویر
-async function generateImage(topic: string): Promise<string> {
+async function generateImage(_topic: string): Promise<string> {
   // تصاویر حذف شدند - فقط placeholder
   return '/images/placeholder.jpg'
 }
