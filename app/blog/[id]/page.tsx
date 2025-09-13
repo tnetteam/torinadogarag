@@ -65,7 +65,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
     openGraph: {
       title: post.title,
       description: post.excerpt,
-      images: post.image ? [post.image] : [],
+      images: [],
     },
   }
 }

@@ -107,23 +107,7 @@ export default function BlogPreview() {
                 animationDelay: `${index * 0.1}s`
               }}
             >
-              {/* Image */}
-              <div className="relative h-48 overflow-hidden">
-                {post.image ? (
-                  <CardImage
-                    src={post.image}
-                    alt={post.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                    fill
-                  />
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-dark-800 to-dark-900 flex items-center justify-center">
-                    <div className="text-center text-gray-400">
-                      <Eye className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                      <p className="text-sm">{post.title}</p>
-                    </div>
-                  </div>
-                )}
+              {/* تصاویر حذف شدند */}
                 
                 {/* Category Badge */}
                 <div className="absolute top-4 right-4">
