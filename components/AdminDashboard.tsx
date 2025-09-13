@@ -934,7 +934,8 @@ export default function AdminDashboard() {
         if (result.success) {
           setAutoGenSettings({
             articlesPerDay: result.data.articlesPerDay || 3,
-            generationHours: result.data.generationHours || [9, 17, 1]
+            generationHours: result.data.generationHours || [9, 17, 1],
+            isEnabled: result.data.enabled !== undefined ? result.data.enabled : true
           })
         }
       }
