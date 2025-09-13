@@ -27,22 +27,21 @@ import Image from 'next/image'
 import { Calendar, User, Eye, ArrowLeft, Clock } from 'lucide-react'
 
 export async function generateStaticParams() {
+  // در build time، از فایل JSON مستقیماً بخوانیم
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/admin/blog`, {
-      headers: {
-        'Authorization': 'Bearer garage-admin-2024-secure-key-12345'
-      }
-    })
+    const fs = require('fs')
+    const path = require('path')
     
-    if (response.ok) {
-      const result = await response.json()
-      if (result.success) {
-        return result.data
-          .filter((post: BlogPost) => post.status === 'published')
-          .map((post: BlogPost) => ({
-            id: post.id.toString(),
-          }))
-      }
+    const blogPostsPath = path.join(process.cwd(), 'data', 'blog-posts.json')
+    if (fs.existsSync(blogPostsPath)) {
+      const data = fs.readFileSync(blogPostsPath, 'utf8')
+      const posts = JSON.parse(data)
+      
+      return posts
+        .filter((post: BlogPost) => post.status === 'published')
+        .map((post: BlogPost) => ({
+          id: post.id.toString(),
+        }))
     }
   } catch (error) {
     console.error('Error generating static params:', error)
@@ -74,19 +73,16 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 
 async function getBlogPost(id: string) {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/admin/blog`, {
-      headers: {
-        'Authorization': 'Bearer garage-admin-2024-secure-key-12345'
-      },
-      cache: 'no-store'
-    })
+    const fs = require('fs')
+    const path = require('path')
     
-    if (response.ok) {
-      const result = await response.json()
-      if (result.success) {
-        const post = result.data.find((post: BlogPost) => post.id.toString() === id && post.status === 'published')
-        return post
-      }
+    const blogPostsPath = path.join(process.cwd(), 'data', 'blog-posts.json')
+    if (fs.existsSync(blogPostsPath)) {
+      const data = fs.readFileSync(blogPostsPath, 'utf8')
+      const posts = JSON.parse(data)
+      
+      const post = posts.find((post: BlogPost) => post.id.toString() === id && post.status === 'published')
+      return post
     }
   } catch (error) {
     console.error('Error fetching blog post:', error)
