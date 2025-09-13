@@ -64,8 +64,8 @@ ${request.keyword} یکی از مهم‌ترین بخش‌های خودرو اس
 
 // تولید تصویر با Gemini
 export async function generateImageWithGemini(topic?: string): Promise<string> {
-  // تصاویر حذف شدند - فقط placeholder
-  return '/images/placeholder.jpg'
+  // تصاویر حذف شدند
+  return ''
 }
 
 // تولید محتوای کامل

@@ -61,8 +61,8 @@ function writeCronSettings(settings: Record<string, unknown>) {
 
 // تولید تصویر
 async function generateImage(): Promise<string> {
-  // تصاویر حذف شدند - فقط placeholder
-  return '/images/placeholder.jpg'
+  // تصاویر حذف شدند
+  return ''
 }
 
 
