@@ -60,7 +60,7 @@ function writeCronSettings(settings: Record<string, unknown>) {
 }
 
 // تولید تصویر
-async function generateImage(_topic: string): Promise<string> {
+async function generateImage(): Promise<string> {
   // تصاویر حذف شدند - فقط placeholder
   return '/images/placeholder.jpg'
 }
@@ -81,7 +81,7 @@ async function generateBlogPostWithAI(): Promise<BlogPost> {
     ]
     
     const randomTopic = topics[Math.floor(Math.random() * topics.length)]
-    const image = await generateImage(randomTopic)
+    const image = await generateImage()
     
     const blogPost: BlogPost = {
       id: Date.now(),
