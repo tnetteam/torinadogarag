@@ -1,6 +1,6 @@
 {
   "enabled": true,
-  "articlesPerDay": 1,
-  "generationHours": [9],
+  "articlesPerDay": 3,
+  "generationHours": [9, 17, 1],
   "lastBlogGeneration": null
 }
