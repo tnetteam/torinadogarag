@@ -165,18 +165,12 @@ function writeBlogPosts(posts: BlogPost[]): boolean {
 }
 
 // GET - اجرای cron job
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Log شروع Cron Job
     console.log('🚀 Cron Job شروع شد -', new Date().toLocaleString('fa-IR'))
     
-    // بررسی کلید امنیتی - بدون استفاده از request.url
-    const cronKey = request.headers.get('x-cron-key') || 'garage-cron-2024-secure-key'
-    
-    if (cronKey !== 'garage-cron-2024-secure-key') {
-      console.log('❌ کلید امنیتی نامعتبر')
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 })
-    }
+    // Cron Job از Vercel اجرا می‌شود - نیازی به بررسی کلید نیست
 
     const settings = readCronSettings()
     
