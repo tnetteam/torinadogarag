@@ -341,6 +341,7 @@ export default function AdminDashboard() {
       // Add a small delay to prevent immediate retry
       const timer = setTimeout(() => {
         fetchDashboardData()
+        fetchCronSettings() // بارگذاری تنظیمات Cron
       }, 100)
       
       return () => clearTimeout(timer)
@@ -917,6 +918,30 @@ export default function AdminDashboard() {
   //   alert('این بخش موقتاً غیرفعال است. از Gemini استفاده می‌شود.')
   //   setShowApiKeyForm(false)
   // }
+
+  // Cron Settings functions
+  const fetchCronSettings = async () => {
+    try {
+      const response = await fetch('/api/admin/cron-settings', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      
+      if (response.ok) {
+        const result = await response.json()
+        if (result.success) {
+          setAutoGenSettings({
+            articlesPerDay: result.data.articlesPerDay || 3,
+            generationHours: result.data.generationHours || [9, 17, 1]
+          })
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching cron settings:', error)
+    }
+  }
 
   // Gemini Settings functions
   const fetchGeminiSettings = async () => {
@@ -3975,10 +4000,26 @@ export default function AdminDashboard() {
                         انصراف
                       </button>
                       <button
-                        onClick={() => {
-                          // TODO: Save settings to backend
-                          alert('تنظیمات با موفقیت ذخیره شد')
-                          setShowAutoGenSettings(false)
+                        onClick={async () => {
+                          try {
+                            const response = await fetch('/api/admin/cron-settings', {
+                              method: 'POST',
+                              headers: {
+                                'Content-Type': 'application/json',
+                              },
+                              body: JSON.stringify(autoGenSettings)
+                            })
+                            
+                            if (response.ok) {
+                              alert('تنظیمات با موفقیت ذخیره شد')
+                              setShowAutoGenSettings(false)
+                            } else {
+                              alert('خطا در ذخیره تنظیمات')
+                            }
+                          } catch (error) {
+                            console.error('Error saving settings:', error)
+                            alert('خطا در ذخیره تنظیمات')
+                          }
                         }}
                         className="btn-primary flex items-center"
                       >
