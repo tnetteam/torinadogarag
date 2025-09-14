@@ -50,8 +50,8 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
-    const fs = require('fs')
-    const path = require('path')
+    const fs = await import('fs')
+    const path = await import('path')
     
     const contactSettingsPath = path.join(process.cwd(), 'data', 'contact-settings.json')
     

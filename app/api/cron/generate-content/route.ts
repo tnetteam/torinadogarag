@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { generateCompleteContent } from '@/lib/gemini-content-generator'
 import fs from 'fs'
 import path from 'path'
@@ -20,6 +20,16 @@ interface BlogPost {
   publishedAt: string
   createdAt: string
   updatedAt: string
+}
+
+interface CronSettings {
+  enabled: boolean
+  interval: 'daily' | 'weekly' | 'monthly' | 'hourly'
+  postsPerRun: number
+  lastRun: string | null
+  scheduleTime: string
+  timezone: string
+  topics: string[]
 }
 
 // خواندن تنظیمات Gemini
@@ -97,7 +107,7 @@ function writeBlogPosts(posts: BlogPost[]): boolean {
 }
 
 // نوشتن تنظیمات Cron
-function writeCronSettings(settings: any): boolean {
+function writeCronSettings(settings: CronSettings): boolean {
   try {
     const cronPath = path.join(process.cwd(), 'data', 'cron-settings.json')
     fs.writeFileSync(cronPath, JSON.stringify(settings, null, 2))
@@ -138,7 +148,7 @@ async function generateAutoBlogPost(topic: string, geminiApiKey: string): Promis
 }
 
 // بررسی نیاز به اجرای Cron
-function shouldRunCron(cronSettings: any): boolean {
+function shouldRunCron(cronSettings: CronSettings): boolean {
   if (!cronSettings.enabled) return false
   
   const now = new Date()
@@ -188,7 +198,7 @@ export async function GET() {
 }
 
 // POST - اجرای Cron Job (برای cron-job.org)
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
     console.log('🚀 Cron job triggered by external service')
     

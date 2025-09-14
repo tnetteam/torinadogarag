@@ -170,7 +170,7 @@ function shouldRunCron(cronSettings: CronSettings): boolean {
 }
 
 // اجرای Cron Job
-export async function runCronJob(): Promise<{ success: boolean; message: string; data?: any }> {
+export async function runCronJob(): Promise<{ success: boolean; message: string; data?: { postsGenerated: number; generatedPosts: string[]; nextRun?: string } }> {
   try {
     const cronSettings = readCronSettings()
     const geminiSettings = readGeminiSettings()
@@ -232,7 +232,8 @@ export async function runCronJob(): Promise<{ success: boolean; message: string;
           success: true,
           message: `${generatedPosts.length} مقاله با موفقیت تولید شد`,
           data: {
-            generatedPosts,
+            postsGenerated: generatedPosts.length,
+            generatedPosts: generatedPosts.map(post => post.title),
             nextRun: cronSettings.interval === 'daily' ? 'فردا' : 
                     cronSettings.interval === 'weekly' ? 'هفته آینده' : 'ماه آینده'
           }
