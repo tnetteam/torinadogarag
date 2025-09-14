@@ -1,5 +1,6 @@
 {
   "enabled": true,
+  "blogInterval": 8,
   "articlesPerDay": 3,
   "generationHours": [9, 17, 1],
   "lastBlogGeneration": null

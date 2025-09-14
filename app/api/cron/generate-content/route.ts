@@ -77,7 +77,9 @@ async function generateBlogPostWithAI(): Promise<BlogPost> {
       'نحوه تعمیر کولر خودرو',
       'راهنمای تعمیر سیستم تعلیق',
       'نکات مهم در تعمیر موتور دیزل',
-      'راهنمای تعمیر سیستم سوخت'
+      'راهنمای تعمیر سیستم سوخت',
+      'تعمیر و نگهداری سیستم خنک‌کننده',
+      'راهنمای تعمیر سیستم اگزوز'
     ]
     
     const randomTopic = topics[Math.floor(Math.random() * topics.length)]
@@ -128,6 +130,7 @@ ${randomTopic} نیاز به دقت و تخصص دارد. با رعایت نکا
       updatedAt: new Date().toISOString()
     }
     
+    console.log('📄 مقاله تولید شد:', blogPost.title)
     return blogPost
     
   } catch (error) {
@@ -141,13 +144,19 @@ ${randomTopic} نیاز به دقت و تخصص دارد. با رعایت نکا
 function readBlogPosts(): BlogPost[] {
   try {
     const blogPath = path.join(process.cwd(), 'data', 'blog-posts.json')
+    console.log('📁 مسیر فایل مقالات:', blogPath)
+    console.log('📁 وجود فایل:', fs.existsSync(blogPath))
+    
     if (fs.existsSync(blogPath)) {
       const data = fs.readFileSync(blogPath, 'utf8')
-      return JSON.parse(data)
+      const posts = JSON.parse(data)
+      console.log('📚 تعداد مقالات موجود:', posts.length)
+      return posts
     }
+    console.log('📚 فایل مقالات وجود ندارد، آرایه خالی برمی‌گردانیم')
     return []
   } catch (error) {
-    console.error('Error reading blog posts:', error)
+    console.error('❌ خطا در خواندن مقالات:', error)
     return []
   }
 }
@@ -156,10 +165,14 @@ function readBlogPosts(): BlogPost[] {
 function writeBlogPosts(posts: BlogPost[]): boolean {
   try {
     const blogPath = path.join(process.cwd(), 'data', 'blog-posts.json')
+    console.log('💾 نوشتن مقالات در مسیر:', blogPath)
+    console.log('💾 تعداد مقالات برای نوشتن:', posts.length)
+    
     fs.writeFileSync(blogPath, JSON.stringify(posts, null, 2))
+    console.log('✅ مقالات با موفقیت ذخیره شدند')
     return true
   } catch (error) {
-    console.error('Error writing blog posts:', error)
+    console.error('❌ خطا در نوشتن مقالات:', error)
     return false
   }
 }
@@ -187,12 +200,23 @@ export async function GET() {
       blogCount: 0
     }
 
-    // بررسی نیاز به تولید مقاله
-    const shouldGenerateBlog = !settings.lastBlogGeneration || 
-      (now.getTime() - new Date(settings.lastBlogGeneration).getTime()) >= (settings.blogInterval * 60 * 60 * 1000)
+    // بررسی نیاز به تولید مقاله - موقتاً همیشه true
+    const shouldGenerateBlog = true // TEMP: همیشه مقاله تولید کن
+    
+    // شرط اصلی (کامنت شده):
+    // const shouldGenerateBlog = !settings.lastBlogGeneration || 
+    //   (now.getTime() - new Date(settings.lastBlogGeneration).getTime()) >= (settings.blogInterval * 60 * 60 * 1000)
+
+    console.log('🔍 بررسی تولید مقاله:', {
+      shouldGenerateBlog,
+      lastBlogGeneration: settings.lastBlogGeneration,
+      blogInterval: settings.blogInterval,
+      now: now.toISOString()
+    })
 
     if (shouldGenerateBlog) {
       try {
+        console.log('📝 شروع تولید مقاله جدید...')
         const newBlogPost = await generateBlogPostWithAI()
         const existingPosts = readBlogPosts()
         const updatedPosts = [newBlogPost, ...existingPosts]
@@ -201,10 +225,15 @@ export async function GET() {
           results.blogGenerated = true
           results.blogCount = 1
           settings.lastBlogGeneration = now.toISOString()
+          console.log('✅ مقاله جدید با موفقیت تولید و ذخیره شد:', newBlogPost.title)
+        } else {
+          console.error('❌ خطا در ذخیره مقاله')
         }
       } catch (error) {
-        console.error('Error generating blog post:', error)
+        console.error('❌ خطا در تولید مقاله:', error)
       }
+    } else {
+      console.log('⏭️ نیازی به تولید مقاله جدید نیست')
     }
 
     // ذخیره تنظیمات
