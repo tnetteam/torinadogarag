@@ -1,7 +1,20 @@
 {
   "enabled": true,
-  "blogInterval": 8,
-  "articlesPerDay": 3,
-  "generationHours": [9, 17, 1],
-  "lastBlogGeneration": null
+  "interval": "hourly",
+  "postsPerRun": 2,
+  "lastRun": "2025-09-14T11:58:11.546Z",
+  "scheduleTime": "09:00",
+  "timezone": "Asia/Tehran",
+  "topics": [
+    "سیستم برقی خودروهای چینی",
+    "سیستم تعلیق خودرو",
+    "تعمیر سیستم ترمز ABS",
+    "تشخیص عیب با OBD",
+    "تعمیر موتور خودروهای آلمانی",
+    "نگهداری موتور دیزل",
+    "تعمیر سیستم سوخت",
+    "تعمیر کولر خودرو",
+    "تعمیر گیربکس اتوماتیک",
+    "تعمیر سیستم خنک‌کننده"
+  ]
 }

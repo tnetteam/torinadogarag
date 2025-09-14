@@ -35,8 +35,8 @@ export default function OptimizedImage({
   const getBaseName = (imageSrc: string): string => {
     const pathParts = imageSrc.split('/')
     const filename = pathParts[pathParts.length - 1]
-    // Remove file extension only, keep the full base name
-    return filename.replace(/\.(webp|avif|jpg|jpeg|png)$/i, '')
+    // Remove file extension and any size suffix (e.g., -1024)
+    return filename.replace(/\.(webp|avif|jpg|jpeg|png)$/i, '').replace(/-\d+$/, '')
   }
 
   const handleLoad = () => {

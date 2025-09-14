@@ -133,8 +133,8 @@ async function saveServiceImage(imageFile: File): Promise<string> {
     // Clean up temp file
     fs.unlinkSync(tempPath)
 
-    // Return the optimized WebP URL (use the base name without -optimized suffix)
-    return `/images/optimized/${baseName}.webp`
+    // Return the optimized WebP URL (1024px version)
+    return `/images/optimized/${baseName}-1024.webp`
   } catch (error) {
     console.error('Error saving service image:', error)
     throw error

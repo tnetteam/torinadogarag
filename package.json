@@ -11,7 +11,11 @@
     "lint": "next lint",
     "setup": "node scripts/setup.js",
     "convert-webp": "node scripts/convert-to-webp.js",
-    "optimize-images": "npm run convert-webp"
+    "optimize-images": "npm run convert-webp",
+    "test-ai": "node scripts/test-ai-content.js",
+    "generate-content": "node scripts/test-ai-content.js",
+    "test-cron": "node scripts/test-cron.js",
+    "start-cron": "node -e \"fetch('http://localhost:3000/api/cron-control', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({action: 'start'})}).then(r => r.json()).then(console.log)\""
   },
   "dependencies": {
     "@types/node": "^20.0.0",

@@ -68,27 +68,80 @@ async function generateBlogPostWithAI(): Promise<BlogPost> {
       throw new Error('Gemini API key not configured')
     }
 
-    const topics = [
-      'نحوه تعمیر موتور خودرو',
-      'راهنمای تعمیر سیستم ترمز',
-      'نکات مهم در نگهداری خودرو',
-      'تشخیص عیب گیربکس اتوماتیک',
-      'تعمیر سیستم برقی خودرو',
-      'راهنمای تعمیر کولر خودرو',
-      'نحوه تعمیر سیستم تعلیق',
-      'راهنمای تعمیر موتور دیزل',
-      'نکات مهم در تعمیر سیستم سوخت',
-      'راهنمای تعمیر سیستم خنک‌کننده'
+    // موضوعات پیشرفته و تخصصی
+    const advancedTopics = [
+      {
+        keyword: 'تعمیر موتور خودروهای آلمانی',
+        specificTopic: 'تشخیص و تعمیر مشکلات موتور BMW و Mercedes',
+        targetAudience: 'expert' as const,
+        length: 'long' as const
+      },
+      {
+        keyword: 'تعمیر گیربکس اتوماتیک',
+        specificTopic: 'نحوه تعمیر گیربکس CVT و DCT',
+        targetAudience: 'intermediate' as const,
+        length: 'long' as const
+      },
+      {
+        keyword: 'سیستم برقی خودروهای چینی',
+        specificTopic: 'مشکلات رایج سیستم برقی Chery و Geely',
+        targetAudience: 'intermediate' as const,
+        length: 'medium' as const
+      },
+      {
+        keyword: 'تعمیر سیستم ترمز ABS',
+        specificTopic: 'تشخیص و تعمیر سیستم ترمز ضد قفل',
+        targetAudience: 'expert' as const,
+        length: 'long' as const
+      },
+      {
+        keyword: 'نگهداری موتور دیزل',
+        specificTopic: 'نکات مهم نگهداری موتورهای دیزل مدرن',
+        targetAudience: 'intermediate' as const,
+        length: 'medium' as const
+      },
+      {
+        keyword: 'تعمیر سیستم خنک‌کننده',
+        specificTopic: 'تشخیص و تعمیر مشکلات رادیاتور و پمپ آب',
+        targetAudience: 'beginner' as const,
+        length: 'medium' as const
+      },
+      {
+        keyword: 'تعمیر کولر خودرو',
+        specificTopic: 'شارژ گاز و تعمیر کمپرسور کولر',
+        targetAudience: 'intermediate' as const,
+        length: 'medium' as const
+      },
+      {
+        keyword: 'سیستم تعلیق خودرو',
+        specificTopic: 'تعمیر و تنظیم سیستم تعلیق McPherson',
+        targetAudience: 'expert' as const,
+        length: 'long' as const
+      },
+      {
+        keyword: 'تعمیر سیستم سوخت',
+        specificTopic: 'تمیز کردن انژکتور و تنظیم پمپ بنزین',
+        targetAudience: 'intermediate' as const,
+        length: 'medium' as const
+      },
+      {
+        keyword: 'تشخیص عیب با OBD',
+        specificTopic: 'استفاده از دستگاه تشخیص عیب OBD2',
+        targetAudience: 'expert' as const,
+        length: 'long' as const
+      }
     ]
     
-    const randomTopic = topics[Math.floor(Math.random() * topics.length)]
+    const randomTopic = advancedTopics[Math.floor(Math.random() * advancedTopics.length)]
     
     // تولید محتوا با Gemini
     const generatedContent = await generateCompleteContent(
       {
-        keyword: randomTopic,
+        keyword: randomTopic.keyword,
+        specificTopic: randomTopic.specificTopic,
         type: 'blog',
-        length: 'long',
+        length: randomTopic.length,
+        targetAudience: randomTopic.targetAudience,
         city: 'تهران'
       },
       settings.apiKey
@@ -147,7 +200,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { action } = body
+    const { action, customRequest } = body
 
     if (action === 'generate-blog') {
       // تولید مقاله جدید
@@ -169,6 +222,107 @@ export async function POST(request: NextRequest) {
           message: 'خطا در ذخیره مقاله' 
         }, { status: 500 })
       }
+    }
+
+    if (action === 'generate-custom') {
+      // تولید مقاله سفارشی
+      if (!customRequest || !customRequest.keyword) {
+        return NextResponse.json({
+          success: false,
+          message: 'کلمه کلیدی الزامی است'
+        }, { status: 400 })
+      }
+
+      const settings = readGeminiSettings()
+      if (!settings?.apiKey) {
+        return NextResponse.json({
+          success: false,
+          message: 'Gemini API key not configured'
+        }, { status: 500 })
+      }
+
+      const generatedContent = await generateCompleteContent(
+        {
+          keyword: customRequest.keyword,
+          specificTopic: customRequest.specificTopic,
+          type: 'blog',
+          length: customRequest.length || 'medium',
+          targetAudience: customRequest.targetAudience || 'intermediate',
+          city: 'تهران'
+        },
+        settings.apiKey
+      )
+
+      const newPost: BlogPost = {
+        id: Date.now(),
+        title: generatedContent.title,
+        content: generatedContent.content,
+        excerpt: generatedContent.excerpt,
+        image: generatedContent.image,
+        category: generatedContent.category,
+        tags: generatedContent.keywords,
+        author: generatedContent.author,
+        status: 'published',
+        publishedAt: new Date().toISOString(),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      }
+
+      const existingPosts = readBlogPosts()
+      const updatedPosts = [newPost, ...existingPosts]
+      
+      const success = writeBlogPosts(updatedPosts)
+      
+      if (success) {
+        return NextResponse.json({
+          success: true,
+          message: 'مقاله سفارشی با موفقیت تولید شد',
+          data: newPost
+        })
+      } else {
+        return NextResponse.json({ 
+          success: false, 
+          message: 'خطا در ذخیره مقاله' 
+        }, { status: 500 })
+      }
+    }
+
+    if (action === 'generate-batch') {
+      // تولید چندین مقاله به صورت دسته‌ای
+      const { count = 3 } = body
+      const generatedPosts: BlogPost[] = []
+      
+      for (let i = 0; i < count; i++) {
+        try {
+          const newPost = await generateBlogPostWithAI()
+          generatedPosts.push(newPost)
+          
+          // تاخیر کوتاه بین تولیدات
+          await new Promise(resolve => setTimeout(resolve, 2000))
+        } catch (error) {
+          console.error(`Error generating post ${i + 1}:`, error)
+        }
+      }
+
+      if (generatedPosts.length > 0) {
+        const existingPosts = readBlogPosts()
+        const updatedPosts = [...generatedPosts, ...existingPosts]
+        
+        const success = writeBlogPosts(updatedPosts)
+        
+        if (success) {
+          return NextResponse.json({
+            success: true,
+            message: `${generatedPosts.length} مقاله با موفقیت تولید شد`,
+            data: generatedPosts
+          })
+        }
+      }
+
+      return NextResponse.json({ 
+        success: false, 
+        message: 'خطا در تولید مقالات دسته‌ای' 
+      }, { status: 500 })
     }
 
       return NextResponse.json({ 

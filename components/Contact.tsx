@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Phone, Mail, MapPin, Clock, Send, CheckCircle } from 'lucide-react'
+import { MapPin, Send, CheckCircle } from 'lucide-react'
 
 interface ContactSettings {
   companyInfo: {
@@ -43,7 +43,7 @@ export default function Contact() {
 
   const fetchContactSettings = async () => {
     try {
-      const response = await fetch('/api/contact-settings', {
+      const response = await fetch('/api/contact', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -108,24 +108,6 @@ export default function Contact() {
 
   const contactInfo = [
     {
-      icon: Phone,
-      title: 'تلفن تماس',
-      details: [
-        contactSettings?.contactInfo.phone || '021-12345678',
-        contactSettings?.contactInfo.mobile || '0912-345-6789'
-      ],
-      color: 'text-blue-500'
-    },
-    {
-      icon: Mail,
-      title: 'ایمیل',
-      details: [
-        contactSettings?.contactInfo.email || 'info@garage-website.ir',
-        'support@garage-website.ir'
-      ],
-      color: 'text-green-500'
-    },
-    {
       icon: MapPin,
       title: 'آدرس',
       details: [
@@ -133,15 +115,6 @@ export default function Contact() {
         'پلاک 123، طبقه همکف'
       ],
       color: 'text-red-500'
-    },
-    {
-      icon: Clock,
-      title: 'ساعات کاری',
-      details: [
-        contactSettings?.contactInfo.workingHours || 'شنبه تا پنج‌شنبه: 8:00 - 18:00',
-        'جمعه: 8:00 - 14:00'
-      ],
-      color: 'text-yellow-500'
     }
   ]
 
@@ -172,50 +145,36 @@ export default function Contact() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      نام و نام خانوادگی *
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                      placeholder="نام شما"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      شماره تماس *
-                    </label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                      placeholder="09123456789"
-                    />
-                  </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    نام و نام خانوادگی *
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    placeholder="نام شما"
+                  />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
-                    ایمیل
+                    شماره موبایل *
                   </label>
                   <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
                     onChange={handleChange}
+                    required
                     className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                    placeholder="email@example.com"
+                    placeholder="09123456789"
                   />
                 </div>
+
 
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -297,16 +256,6 @@ export default function Contact() {
               ))}
             </div>
 
-            {/* Map Placeholder */}
-            <div className="glass-card-dark p-6">
-              <h4 className="text-lg font-semibold text-white mb-4">موقعیت مکانی</h4>
-              <div className="aspect-video bg-gradient-to-br from-dark-800 to-dark-900 rounded-lg flex items-center justify-center">
-                <div className="text-center text-gray-400">
-                  <MapPin className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                  <p className="text-sm">نقشه گاراژ</p>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

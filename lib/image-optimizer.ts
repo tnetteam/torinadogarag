@@ -61,12 +61,12 @@ export async function optimizeImage(
     }
 
     // نام فایل‌ها
-    const baseName = path.basename(inputPath, path.extname(inputPath))
+    const originalBaseName = path.basename(inputPath, path.extname(inputPath))
     const timestamp = Date.now()
+    const baseName = `${originalBaseName}-${timestamp}`
     
-    const optimizedPath = path.join(outputDir, `${baseName}-${timestamp}.webp`)
-    const webpPath = path.join(outputDir, `${baseName}-${timestamp}.webp`)
-    const avifPath = path.join(outputDir, `${baseName}-${timestamp}.avif`)
+    const avifPath = path.join(outputDir, `${baseName}.avif`)
+    const mainPath = path.join(outputDir, `${baseName}.webp`)
 
     // ایجاد pipeline بهینه‌سازی
     let pipeline = sharp(inputPath)
@@ -82,17 +82,11 @@ export async function optimizeImage(
 
     // تولید فرمت‌های مختلف
     await Promise.all([
-      // WebP با کیفیت بالا
-      pipeline
-        .clone()
-        .webp({ quality: quality + 5 })
-        .toFile(webpPath),
-      
-      // WebP بهینه‌شده
+      // WebP اصلی
       pipeline
         .clone()
         .webp({ quality })
-        .toFile(optimizedPath),
+        .toFile(mainPath),
       
       // AVIF (بهترین فشرده‌سازی)
       pipeline
@@ -103,8 +97,8 @@ export async function optimizeImage(
 
     return {
       originalPath: inputPath,
-      optimizedPath,
-      webpPath,
+      optimizedPath: mainPath,
+      webpPath: mainPath,
       avifPath,
       sizes: {
         original: { width: originalWidth, height: originalHeight },

@@ -244,7 +244,7 @@ export async function GET(request: NextRequest) {
       },
       recentActivity,
       monthlyStats,
-      blogPosts: blogPosts.slice(-5), // Last 5 blog posts
+      blogPosts: blogPosts, // All blog posts
       newsPosts: newsPosts.slice(-5), // Last 5 news posts
       services: services.slice(-5), // Last 5 services
       galleryImages: galleryImages.slice(-5), // Last 5 gallery images

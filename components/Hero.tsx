@@ -101,9 +101,9 @@ export default function Hero() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {/* Text Content */}
             <div className="lg:col-span-7 text-right">
-              <div className="space-y-6">
-                {/* Slide Indicators */}
-                <div className="flex items-center space-x-2 space-x-reverse">
+              <div className="space-y-4 md:space-y-6">
+                {/* Slide Indicators - Hidden on mobile */}
+                <div className="hidden md:flex items-center space-x-2 space-x-reverse">
                   {slides.map((_, index) => (
                     <button
                       key={index}
@@ -118,33 +118,25 @@ export default function Hero() {
                 </div>
 
                 {/* Title */}
-                <div className="space-y-6 animate-fade-in">
-                  <h1 className="text-6xl md:text-8xl hero-title text-gradient-animated">
+                <div className="space-y-4 md:space-y-6 animate-fade-in">
+                  <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl hero-title text-gradient-animated leading-tight">
                     {slides[currentSlide]?.title}
                   </h1>
-                  <h2 className="text-2xl md:text-3xl hero-subtitle text-gradient-gold">
+                  <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl hero-subtitle text-gradient-gold">
                     {slides[currentSlide]?.subtitle}
                   </h2>
                 </div>
 
-                {/* Description */}
-                <p className="text-lg text-gray-300 max-w-2xl hero-description animate-slide-up">
+                {/* Description - Hidden on mobile */}
+                <p className="hidden md:block text-lg text-gray-300 max-w-2xl hero-description animate-slide-up">
                   {slides[currentSlide]?.subtitle}
                 </p>
 
                 {/* CTA Buttons */}
-                <div className="flex flex-col sm:flex-row gap-6 pt-8 animate-fade-in">
-                  {slides[currentSlide]?.buttonText && (
-                    <a 
-                      href={slides[currentSlide]?.buttonLink || '#'}
-                      className="btn-primary text-lg px-10 py-5 shadow-glow-lg interactive-hover hero-button"
-                    >
-                      {slides[currentSlide]?.buttonText}
-                    </a>
-                  )}
+                <div className="flex flex-col sm:flex-row gap-4 md:gap-6 pt-8 md:pt-8 animate-fade-in">
                   <a 
-                    href="/contact"
-                    className="btn-ghost text-lg px-10 py-5 glass-hover hero-button"
+                    href="tel:09126977639"
+                    className="btn-primary text-base md:text-lg px-6 md:px-10 py-3 md:py-5 shadow-glow-lg interactive-hover hero-button text-center"
                   >
                     تماس با ما
                   </a>
@@ -152,8 +144,8 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* Right Side - Enhanced Glass Elements */}
-            <div className="lg:col-span-5 flex justify-center lg:justify-end">
+            {/* Right Side - Enhanced Glass Elements - Hidden on mobile */}
+            <div className="hidden lg:flex lg:col-span-5 justify-center lg:justify-end">
               <div className="relative">
                 {/* Main Glass Vertical Bar */}
                 <div className="w-2 h-96 glass-overlay rounded-full shadow-glow-lg animate-glow"></div>
@@ -178,16 +170,17 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Navigation Arrows */}
+
+      {/* Navigation Arrows - Hidden on mobile */}
       <button
         onClick={prevSlide}
-        className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 glass-button p-3 rounded-full transition-all duration-300 hover:scale-110"
+        className="hidden md:block absolute right-4 top-1/2 transform -translate-y-1/2 z-20 glass-button p-3 rounded-full transition-all duration-300 hover:scale-110"
       >
         <ChevronRight className="w-6 h-6" />
       </button>
       <button
         onClick={nextSlide}
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 glass-button p-3 rounded-full transition-all duration-300 hover:scale-110"
+        className="hidden md:block absolute left-4 top-1/2 transform -translate-y-1/2 z-20 glass-button p-3 rounded-full transition-all duration-300 hover:scale-110"
       >
         <ChevronLeft className="w-6 h-6" />
       </button>

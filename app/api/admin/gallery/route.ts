@@ -149,6 +149,56 @@ export async function GET(request: NextRequest) {
   }
 }
 
+async function saveGalleryImage(imageFile: File): Promise<string> {
+  try {
+    // Dynamic import for server-side only
+    const { optimizeImage, generateResponsiveImages } = await import('@/lib/image-optimizer')
+    
+    // Create directories
+    const tempDir = path.join(process.cwd(), 'temp')
+    const optimizedDir = path.join(process.cwd(), 'public', 'images', 'optimized')
+    
+    if (!fs.existsSync(tempDir)) {
+      fs.mkdirSync(tempDir, { recursive: true })
+    }
+    if (!fs.existsSync(optimizedDir)) {
+      fs.mkdirSync(optimizedDir, { recursive: true })
+    }
+
+    // Generate unique filename
+    const timestamp = Date.now()
+    const fileExtension = imageFile.name.split('.').pop() || 'jpg'
+    const tempFilename = `temp-gallery-${timestamp}.${fileExtension}`
+    const tempPath = path.join(tempDir, tempFilename)
+
+    // Save original file temporarily
+    const bytes = await imageFile.arrayBuffer()
+    const buffer = Buffer.from(bytes)
+    fs.writeFileSync(tempPath, buffer)
+
+    // Optimize image
+    const baseName = `gallery-${timestamp}`
+    await optimizeImage(tempPath, optimizedDir, {
+      width: 1200,
+      height: 800,
+      quality: 90,
+      format: 'webp'
+    })
+
+    // Generate responsive images
+    await generateResponsiveImages(tempPath, optimizedDir, baseName)
+
+    // Clean up temp file
+    fs.unlinkSync(tempPath)
+
+    // Return the optimized WebP URL (1024px version)
+    return `/images/optimized/${baseName}-1024.webp`
+  } catch (error) {
+    console.error('Error saving gallery image:', error)
+    throw error
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const authHeader = request.headers.get('authorization')
@@ -162,17 +212,38 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, message: 'Invalid token' }, { status: 401 })
     }
     
-    const body = await request.json()
-    const { action, imageData, imageId } = body
+    // Handle FormData for file uploads
+    const formData = await request.formData()
+    const action = formData.get('action') as string
+    const imageDataStr = formData.get('imageData') as string
+    const imageId = formData.get('imageId') as string
+    const imageFile = formData.get('image') as File | null
+
+    let imageData
+    try {
+      imageData = JSON.parse(imageDataStr)
+    } catch {
+      return NextResponse.json({ success: false, message: 'داده‌های تصویر نامعتبر است' }, { status: 400 })
+    }
     
     const galleryImages = readGalleryImages()
     
     switch (action) {
       case 'create':
+        if (!imageData) {
+          return NextResponse.json({ success: false, message: 'داده‌های تصویر لازم است' }, { status: 400 })
+        }
+        
+        let imageUrl = ''
+        if (imageFile) {
+          imageUrl = await saveGalleryImage(imageFile)
+        }
+        
         const newId = Math.max(...galleryImages.map((img: GalleryImage) => img.id), 0) + 1
         const newImage = {
           id: newId,
           ...imageData,
+          image: imageUrl,
           date: new Date().toLocaleDateString('fa-IR'),
           size: '2.0 MB', // Default size
           createdAt: new Date().toISOString(),
@@ -192,14 +263,29 @@ export async function POST(request: NextRequest) {
         }
         
       case 'update':
-        const imageIndex = galleryImages.findIndex((img: GalleryImage) => img.id === imageId)
+        if (!imageData || !imageId) {
+          return NextResponse.json({ success: false, message: 'داده‌های تصویر و شناسه لازم است' }, { status: 400 })
+        }
+        
+        const imageIndex = galleryImages.findIndex((img: GalleryImage) => img.id === parseInt(imageId))
         if (imageIndex === -1) {
           return NextResponse.json({ success: false, message: 'تصویر یافت نشد' }, { status: 404 })
+        }
+        
+        let updateImageUrl = galleryImages[imageIndex].image
+        if (imageFile) {
+          try {
+            updateImageUrl = await saveGalleryImage(imageFile)
+          } catch (error) {
+            console.error('Error updating gallery image:', error)
+            return NextResponse.json({ success: false, message: 'خطا در آپلود تصویر' }, { status: 500 })
+          }
         }
         
         galleryImages[imageIndex] = {
           ...galleryImages[imageIndex],
           ...imageData,
+          image: updateImageUrl,
           updatedAt: new Date().toISOString()
         }
         
@@ -214,9 +300,27 @@ export async function POST(request: NextRequest) {
         }
         
       case 'delete':
-        const deleteIndex = galleryImages.findIndex((img: GalleryImage) => img.id === imageId)
+        if (!imageId) {
+          return NextResponse.json({ success: false, message: 'شناسه تصویر لازم است' }, { status: 400 })
+        }
+        
+        const deleteIndex = galleryImages.findIndex((img: GalleryImage) => img.id === parseInt(imageId))
         if (deleteIndex === -1) {
           return NextResponse.json({ success: false, message: 'تصویر یافت نشد' }, { status: 404 })
+        }
+        
+        const imageToDelete = galleryImages[deleteIndex]
+        
+        // Delete image file if exists
+        if (imageToDelete.image) {
+          try {
+            const imagePath = path.join(process.cwd(), 'public', imageToDelete.image)
+            if (fs.existsSync(imagePath)) {
+              fs.unlinkSync(imagePath)
+            }
+          } catch (deleteError) {
+            console.error('Error deleting gallery image:', deleteError)
+          }
         }
         
         galleryImages.splice(deleteIndex, 1)

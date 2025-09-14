@@ -1,9 +1,11 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
+import { generateCompleteContent } from '@/lib/gemini-content-generator'
 import fs from 'fs'
 import path from 'path'
 
+// Force dynamic rendering
 export const dynamic = 'force-dynamic'
-
+export const runtime = 'nodejs'
 
 interface BlogPost {
   id: number
@@ -20,38 +22,85 @@ interface BlogPost {
   updatedAt: string
 }
 
-// خواندن تنظیمات cron
-function readCronSettings() {
+// خواندن تنظیمات Gemini
+function readGeminiSettings() {
   try {
-    const settingsPath = path.join(process.cwd(), 'data', 'cron-settings.json')
+    const settingsPath = path.join(process.cwd(), 'data', 'gemini-settings.json')
     if (fs.existsSync(settingsPath)) {
       const data = fs.readFileSync(settingsPath, 'utf8')
       return JSON.parse(data)
     }
-    return {
-      enabled: true,
-      blogInterval: 8, // ساعت
-      lastBlogGeneration: null,
-      articlesPerDay: 3,
-      generationHours: [9, 15, 21]
+  } catch (error) {
+    console.error('Error reading Gemini settings:', error)
+  }
+  return null
+}
+
+// خواندن تنظیمات Cron
+function readCronSettings() {
+  try {
+    const cronPath = path.join(process.cwd(), 'data', 'cron-settings.json')
+    if (fs.existsSync(cronPath)) {
+      const data = fs.readFileSync(cronPath, 'utf8')
+      return JSON.parse(data)
     }
   } catch (error) {
     console.error('Error reading cron settings:', error)
+  }
+  
+  // تنظیمات پیش‌فرض
     return {
       enabled: true,
-      blogInterval: 8,
-      lastBlogGeneration: null,
-      articlesPerDay: 3,
-      generationHours: [9, 15, 21]
-    }
+    interval: 'daily',
+    postsPerRun: 2,
+    lastRun: null,
+    topics: [
+      'تعمیر موتور خودروهای آلمانی',
+      'تعمیر گیربکس اتوماتیک',
+      'سیستم برقی خودروهای چینی',
+      'تعمیر سیستم ترمز ABS',
+      'نگهداری موتور دیزل',
+      'تعمیر سیستم خنک‌کننده',
+      'تعمیر کولر خودرو',
+      'سیستم تعلیق خودرو',
+      'تعمیر سیستم سوخت',
+      'تشخیص عیب با OBD'
+    ]
   }
 }
 
-// نوشتن تنظیمات cron
-function writeCronSettings(settings: Record<string, unknown>) {
+// خواندن مقالات وبلاگ
+function readBlogPosts(): BlogPost[] {
   try {
-    const settingsPath = path.join(process.cwd(), 'data', 'cron-settings.json')
-    fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2))
+    const blogPath = path.join(process.cwd(), 'data', 'blog-posts.json')
+    if (fs.existsSync(blogPath)) {
+      const data = fs.readFileSync(blogPath, 'utf8')
+      return JSON.parse(data)
+    }
+    return []
+  } catch (error) {
+    console.error('Error reading blog posts:', error)
+    return []
+  }
+}
+
+// نوشتن مقالات وبلاگ
+function writeBlogPosts(posts: BlogPost[]): boolean {
+  try {
+    const blogPath = path.join(process.cwd(), 'data', 'blog-posts.json')
+    fs.writeFileSync(blogPath, JSON.stringify(posts, null, 2))
+    return true
+  } catch (error) {
+    console.error('Error writing blog posts:', error)
+    return false
+  }
+}
+
+// نوشتن تنظیمات Cron
+function writeCronSettings(settings: any): boolean {
+  try {
+    const cronPath = path.join(process.cwd(), 'data', 'cron-settings.json')
+    fs.writeFileSync(cronPath, JSON.stringify(settings, null, 2))
     return true
   } catch (error) {
     console.error('Error writing cron settings:', error)
@@ -59,203 +108,178 @@ function writeCronSettings(settings: Record<string, unknown>) {
   }
 }
 
-// تولید تصویر
-async function generateImage(): Promise<string> {
-  // تصاویر حذف شدند
-  return ''
-}
+// تولید مقاله خودکار
+async function generateAutoBlogPost(topic: string, geminiApiKey: string): Promise<BlogPost> {
+  const generatedContent = await generateCompleteContent(
+    {
+      keyword: topic,
+      type: 'blog',
+      length: 'medium',
+      targetAudience: 'intermediate',
+      city: 'تهران'
+    },
+    geminiApiKey
+  )
 
-
-// تولید مقاله
-async function generateBlogPostWithAI(): Promise<BlogPost> {
-  try {
-    const topics = [
-      'راهنمای تعمیر موتور خودرو',
-      'نکات مهم در نگهداری سیستم ترمز',
-      'تشخیص و تعمیر عیب گیربکس',
-      'راهنمای تعمیر سیستم برقی خودرو',
-      'نحوه تعمیر کولر خودرو',
-      'راهنمای تعمیر سیستم تعلیق',
-      'نکات مهم در تعمیر موتور دیزل',
-      'راهنمای تعمیر سیستم سوخت',
-      'تعمیر و نگهداری سیستم خنک‌کننده',
-      'راهنمای تعمیر سیستم اگزوز'
-    ]
-    
-    const randomTopic = topics[Math.floor(Math.random() * topics.length)]
-    const image = await generateImage()
-    
-    const blogPost: BlogPost = {
-      id: Date.now(),
-      title: `راهنمای کامل ${randomTopic}`,
-      content: `# ${randomTopic}
-
-## مقدمه
-${randomTopic} یکی از مهم‌ترین جنبه‌های نگهداری و تعمیر خودرو محسوب می‌شود. در این مقاله به بررسی کامل این موضوع می‌پردازیم.
-
-## ابزارهای مورد نیاز
-- آچارهای مختلف
-- پیچ‌گوشتی‌ها
-- ابزارهای تشخیص
-- قطعات یدکی
-
-## مراحل تعمیر
-### مرحله 1: تشخیص عیب
-ابتدا باید عیب را به درستی تشخیص دهید. این کار نیاز به تجربه و دانش دارد.
-
-### مرحله 2: آماده‌سازی
-ابزارها و قطعات مورد نیاز را آماده کنید.
-
-### مرحله 3: اجرای تعمیر
-مراحل تعمیر را به ترتیب و با دقت انجام دهید.
-
-### مرحله 4: تست نهایی
-پس از تعمیر، سیستم را کاملاً تست کنید.
-
-## نکات ایمنی
-- همیشه از ابزارهای مناسب استفاده کنید
-- ایمنی را در اولویت قرار دهید
-- در صورت نیاز به متخصص مراجعه کنید
-
-## نتیجه‌گیری
-${randomTopic} نیاز به دقت و تخصص دارد. با رعایت نکات ذکر شده، می‌توانید این کار را به درستی انجام دهید.`,
-      excerpt: `راهنمای کامل ${randomTopic} - نکات مهم و مراحل تعمیر`,
-      image,
-      category: 'تعمیر خودرو',
-      tags: ['تعمیر', 'خودرو', 'راهنما', 'تخصصی'],
-      author: 'سیستم هوش مصنوعی',
+  return {
+    id: Date.now() + Math.random(),
+    title: generatedContent.title,
+    content: generatedContent.content,
+    excerpt: generatedContent.excerpt,
+    image: generatedContent.image,
+    category: generatedContent.category,
+    tags: generatedContent.keywords,
+    author: generatedContent.author,
       status: 'published',
       publishedAt: new Date().toISOString(),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
-    }
-    
-    console.log('📄 مقاله تولید شد:', blogPost.title)
-    return blogPost
-    
-  } catch (error) {
-    console.error('Error generating blog post with AI:', error)
-    throw error
   }
 }
 
-
-// خواندن مقالات
-function readBlogPosts(): BlogPost[] {
-  try {
-    const blogPath = path.join(process.cwd(), 'data', 'blog-posts.json')
-    console.log('📁 مسیر فایل مقالات:', blogPath)
-    console.log('📁 وجود فایل:', fs.existsSync(blogPath))
-    
-    if (fs.existsSync(blogPath)) {
-      const data = fs.readFileSync(blogPath, 'utf8')
-      const posts = JSON.parse(data)
-      console.log('📚 تعداد مقالات موجود:', posts.length)
-      return posts
-    }
-    console.log('📚 فایل مقالات وجود ندارد، آرایه خالی برمی‌گردانیم')
-    return []
-  } catch (error) {
-    console.error('❌ خطا در خواندن مقالات:', error)
-    return []
+// بررسی نیاز به اجرای Cron
+function shouldRunCron(cronSettings: any): boolean {
+  if (!cronSettings.enabled) return false
+  
+  const now = new Date()
+  const lastRun = cronSettings.lastRun ? new Date(cronSettings.lastRun) : null
+  
+  if (!lastRun) return true
+  
+  const interval = cronSettings.interval || 'daily'
+  const timeDiff = now.getTime() - lastRun.getTime()
+  
+  switch (interval) {
+    case 'daily':
+      return timeDiff >= 24 * 60 * 60 * 1000 // 24 hours
+    case 'weekly':
+      return timeDiff >= 7 * 24 * 60 * 60 * 1000 // 7 days
+    case 'monthly':
+      return timeDiff >= 30 * 24 * 60 * 60 * 1000 // 30 days
+    default:
+      return false
   }
 }
 
-// نوشتن مقالات
-function writeBlogPosts(posts: BlogPost[]): boolean {
-  try {
-    const blogPath = path.join(process.cwd(), 'data', 'blog-posts.json')
-    console.log('💾 نوشتن مقالات در مسیر:', blogPath)
-    console.log('💾 تعداد مقالات برای نوشتن:', posts.length)
-    
-    fs.writeFileSync(blogPath, JSON.stringify(posts, null, 2))
-    console.log('✅ مقالات با موفقیت ذخیره شدند')
-    return true
-  } catch (error) {
-    console.error('❌ خطا در نوشتن مقالات:', error)
-    return false
-  }
-}
-
-// GET - اجرای cron job
+// GET - دریافت وضعیت
 export async function GET() {
   try {
-    // Log شروع Cron Job
-    console.log('🚀 Cron Job شروع شد -', new Date().toLocaleString('fa-IR'))
+    const cronSettings = readCronSettings()
+    const geminiSettings = readGeminiSettings()
     
-    // Cron Job از Vercel اجرا می‌شود - نیازی به بررسی کلید نیست
+    return NextResponse.json({
+      success: true,
+      data: {
+        cronEnabled: cronSettings.enabled,
+        geminiConfigured: !!geminiSettings?.apiKey,
+        lastRun: cronSettings.lastRun,
+        nextRun: shouldRunCron(cronSettings) ? 'اکنون' : 'بعداً',
+        interval: cronSettings.interval,
+        postsPerRun: cronSettings.postsPerRun
+      }
+    })
+  } catch (error) {
+    console.error('Error checking cron status:', error)
+    return NextResponse.json({
+      success: false,
+      message: 'خطا در بررسی وضعیت Cron'
+    }, { status: 500 })
+  }
+}
 
-    const settings = readCronSettings()
+// POST - اجرای Cron Job (برای cron-job.org)
+export async function POST(request: NextRequest) {
+  try {
+    console.log('🚀 Cron job triggered by external service')
     
-    if (!settings.enabled) {
+    const cronSettings = readCronSettings()
+    const geminiSettings = readGeminiSettings()
+    
+    if (!geminiSettings?.apiKey) {
+      console.error('❌ Gemini API key not configured')
+      return NextResponse.json({
+        success: false,
+        message: 'Gemini API key not configured'
+      }, { status: 500 })
+    }
+    
+    // بررسی نیاز به اجرا
+    if (!shouldRunCron(cronSettings)) {
+      console.log('⏭️ Cron job already executed recently, skipping...')
       return NextResponse.json({ 
         success: true, 
-        message: 'Cron job disabled' 
+        message: 'Cron job already executed recently',
+        skipped: true
       })
     }
-
-    const now = new Date()
-    const results = {
-      blogGenerated: false,
-      blogCount: 0
-    }
-
-    // بررسی نیاز به تولید مقاله - موقتاً همیشه true
-    const shouldGenerateBlog = true // TEMP: همیشه مقاله تولید کن
     
-    // شرط اصلی (کامنت شده):
-    // const shouldGenerateBlog = !settings.lastBlogGeneration || 
-    //   (now.getTime() - new Date(settings.lastBlogGeneration).getTime()) >= (settings.blogInterval * 60 * 60 * 1000)
-
-    console.log('🔍 بررسی تولید مقاله:', {
-      shouldGenerateBlog,
-      lastBlogGeneration: settings.lastBlogGeneration,
-      blogInterval: settings.blogInterval,
-      now: now.toISOString()
-    })
-
-    if (shouldGenerateBlog) {
+    const postsPerRun = cronSettings.postsPerRun || 2
+    const topics = cronSettings.topics || []
+    const generatedPosts: BlogPost[] = []
+    
+    // انتخاب موضوعات تصادفی
+    const selectedTopics = topics
+      .sort(() => 0.5 - Math.random())
+      .slice(0, postsPerRun)
+    
+    console.log(`📝 Generating ${selectedTopics.length} posts...`)
+    
+    // تولید مقالات
+    for (const topic of selectedTopics) {
       try {
-        console.log('📝 شروع تولید مقاله جدید...')
-        const newBlogPost = await generateBlogPostWithAI()
-        const existingPosts = readBlogPosts()
-        const updatedPosts = [newBlogPost, ...existingPosts]
+        console.log(`📄 Generating post for topic: ${topic}`)
+        const newPost = await generateAutoBlogPost(topic, geminiSettings.apiKey)
+        generatedPosts.push(newPost)
         
-        if (writeBlogPosts(updatedPosts)) {
-          results.blogGenerated = true
-          results.blogCount = 1
-          settings.lastBlogGeneration = now.toISOString()
-          console.log('✅ مقاله جدید با موفقیت تولید و ذخیره شد:', newBlogPost.title)
-        } else {
-          console.error('❌ خطا در ذخیره مقاله')
-        }
+        // تاخیر کوتاه بین تولیدات
+        await new Promise(resolve => setTimeout(resolve, 3000))
       } catch (error) {
-        console.error('❌ خطا در تولید مقاله:', error)
+        console.error(`❌ Error generating post for topic "${topic}":`, error)
       }
-    } else {
-      console.log('⏭️ نیازی به تولید مقاله جدید نیست')
     }
-
-    // ذخیره تنظیمات
-    writeCronSettings(settings)
+    
+    if (generatedPosts.length > 0) {
+      // ذخیره مقالات
+      const existingPosts = readBlogPosts()
+      const updatedPosts = [...generatedPosts, ...existingPosts]
+      
+      const success = writeBlogPosts(updatedPosts)
+      
+      if (success) {
+        // به‌روزرسانی تنظیمات Cron
+        cronSettings.lastRun = new Date().toISOString()
+        writeCronSettings(cronSettings)
+        
+        console.log(`✅ Cron job completed - ${generatedPosts.length} posts generated`)
 
     return NextResponse.json({
       success: true,
-      message: 'Cron job executed successfully',
-      data: results,
-      nextRun: {
-        blog: settings.lastBlogGeneration ? 
-          new Date(new Date(settings.lastBlogGeneration).getTime() + (settings.blogInterval * 60 * 60 * 1000)).toISOString() : 
-          null
+          message: `${generatedPosts.length} مقاله با موفقیت تولید شد`,
+          data: {
+            generatedPosts: generatedPosts.map(post => ({
+              id: post.id,
+              title: post.title,
+              category: post.category,
+              createdAt: post.createdAt
+            })),
+            nextRun: cronSettings.interval === 'daily' ? 'فردا' : 
+                    cronSettings.interval === 'weekly' ? 'هفته آینده' : 'ماه آینده'
+          }
+        })
       }
-    })
+    }
+    
+    console.error('❌ Failed to save generated posts')
+    return NextResponse.json({
+      success: false,
+      message: 'خطا در تولید مقالات خودکار'
+    }, { status: 500 })
 
   } catch (error) {
-    console.error('Error in cron job:', error)
+    console.error('❌ Cron job error:', error)
     return NextResponse.json({ 
       success: false, 
-      message: 'Cron job failed',
-      error: error instanceof Error ? error.message : 'Unknown error'
+      message: error instanceof Error ? error.message : 'خطا در اجرای Cron Job'
     }, { status: 500 })
   }
 }

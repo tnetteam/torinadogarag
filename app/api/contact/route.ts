@@ -49,11 +49,37 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET() {
-  return NextResponse.json(
-    { 
-      success: false, 
-      message: 'Method not allowed' 
-    },
-    { status: 405 }
-  )
+  try {
+    const fs = require('fs')
+    const path = require('path')
+    
+    const contactSettingsPath = path.join(process.cwd(), 'data', 'contact-settings.json')
+    
+    if (!fs.existsSync(contactSettingsPath)) {
+      return NextResponse.json(
+        { 
+          success: false, 
+          message: 'Contact settings not found' 
+        },
+        { status: 404 }
+      )
+    }
+    
+    const settings = JSON.parse(fs.readFileSync(contactSettingsPath, 'utf8'))
+    
+    return NextResponse.json({
+      success: true,
+      data: settings
+    })
+    
+  } catch (error) {
+    console.error('Error fetching contact settings:', error)
+    return NextResponse.json(
+      { 
+        success: false, 
+        message: 'Error fetching contact settings' 
+      },
+      { status: 500 }
+    )
+  }
 }

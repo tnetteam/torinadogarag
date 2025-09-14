@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { MapPin, Clock } from 'lucide-react'
 import Section from '@/components/Section'
 import AnimatedCard from '@/components/AnimatedCard'
 import Contact from '@/components/Contact'
@@ -38,7 +39,7 @@ export default function ContactPage() {
 
   const fetchContactSettings = async () => {
     try {
-      const response = await fetch('/api/contact-settings', {
+      const response = await fetch('/api/contact', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -141,22 +142,42 @@ export default function ContactPage() {
         </div>
       </Section>
 
-      {/* Map Section */}
+      {/* Location Section */}
       <Section 
         title="موقعیت مکانی"
-        subtitle="نقشه موقعیت گاراژ"
+        subtitle="آدرس و دسترسی به گاراژ"
         background="pattern"
         padding="lg"
       >
         <AnimatedCard variant="glass" delay={0} className="p-8">
-          <div className="w-full h-96 bg-gradient-to-br from-primary-500/20 to-primary-600/30 rounded-2xl flex items-center justify-center">
-            <div className="text-center">
-              <div className="text-6xl mb-4">🗺️</div>
-              <p className="text-gray-300">نقشه گوگل</p>
-              <p className="text-sm text-gray-400 mt-2">
-                {contactSettings?.contactInfo.address || 'تهران، خیابان ولیعصر، کوچه 15، پلاک 23'}
-              </p>
+          <div className="max-w-2xl mx-auto">
+            {/* Address Info */}
+            <div className="space-y-6">
+              <div className="flex items-start space-x-4 space-x-reverse">
+                <div className="w-12 h-12 bg-primary-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <MapPin className="w-6 h-6 text-primary-400" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-white mb-2">آدرس گاراژ</h3>
+                  <p className="text-gray-300 leading-relaxed">
+                    {contactSettings?.contactInfo.address || 'تهران، رسالت، خیابان نیرو دریایی، کارواش خلیج فارس، مجموعه تورنادو'}
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex items-start space-x-4 space-x-reverse">
+                <div className="w-12 h-12 bg-primary-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <Clock className="w-6 h-6 text-primary-400" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-white mb-2">ساعات کاری</h3>
+                  <p className="text-gray-300">
+                    {contactSettings?.contactInfo.workingHours || 'شنبه تا جمعه: 8:00 - 22:00'}
+                  </p>
+                </div>
+              </div>
             </div>
+
           </div>
         </AnimatedCard>
       </Section>

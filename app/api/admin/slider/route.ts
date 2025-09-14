@@ -136,7 +136,7 @@ async function saveSliderImage(imageFile: File): Promise<string> {
     // Clean up temp file
     fs.unlinkSync(tempPath)
 
-    // Return the optimized WebP URL (use the base name without -optimized suffix)
+    // Return the optimized WebP URL (use the actual generated filename)
     return `/images/optimized/${baseName}.webp`
   } catch (error) {
     console.error('Error saving slider image:', error)

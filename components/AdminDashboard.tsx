@@ -1228,43 +1228,38 @@ export default function AdminDashboard() {
       category: image.category || '',
       tags: image.tags?.join(', ') || '',
       image: null,
-      imagePreview: image.imageUrl || ''
+      imagePreview: image.image || image.imageUrl || ''
     })
   }
 
   const handleSaveImage = async () => {
     try {
-      let imageUrl = ''
-      
-      // Handle image upload
-      if (newImage.image) {
-        // In a real app, you would upload to a server
-        // For now, we'll use the preview URL
-        imageUrl = newImage.imagePreview
-      } else if (editingImage && editingImage.imageUrl) {
-        imageUrl = editingImage.imageUrl
-      }
-
       const imageData = {
-        ...newImage,
-        tags: newImage.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
-        image: imageUrl
+        name: newImage.name,
+        description: newImage.description,
+        category: newImage.category,
+        tags: newImage.tags.split(',').map(tag => tag.trim()).filter(tag => tag)
       }
 
       const action = editingImage ? 'update' : 'create'
-      const requestBody = {
-        action,
-        imageData,
-        imageId: editingImage?.id
+      
+      // Create FormData for file upload
+      const formData = new FormData()
+      formData.append('action', action)
+      formData.append('imageData', JSON.stringify(imageData))
+      if (editingImage?.id) {
+        formData.append('imageId', editingImage.id.toString())
+      }
+      if (newImage.image) {
+        formData.append('image', newImage.image)
       }
 
       const response = await fetch('/api/admin/gallery', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           'Authorization': 'Bearer garage-admin-2024-secure-key-12345'
         },
-        body: JSON.stringify(requestBody)
+        body: formData
       })
       
       if (response.ok) {
@@ -1301,16 +1296,17 @@ export default function AdminDashboard() {
   const handleDeleteImage = async (imageId: number) => {
     if (confirm('آیا مطمئن هستید که می‌خواهید این تصویر را حذف کنید؟')) {
       try {
+        const formData = new FormData()
+        formData.append('action', 'delete')
+        formData.append('imageId', imageId.toString())
+        formData.append('imageData', JSON.stringify({}))
+        
         const response = await fetch('/api/admin/gallery', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
             'Authorization': 'Bearer garage-admin-2024-secure-key-12345'
           },
-          body: JSON.stringify({
-            action: 'delete',
-            imageId: imageId
-          })
+          body: formData
         })
         
         if (response.ok) {
@@ -1323,7 +1319,8 @@ export default function AdminDashboard() {
             alert(result.message)
           }
         } else {
-          alert('خطا در حذف تصویر')
+          const errorResult = await response.json()
+          alert(errorResult.message || 'خطا در حذف تصویر')
         }
       } catch (error) {
         console.error('Error deleting image:', error)
@@ -1460,16 +1457,16 @@ export default function AdminDashboard() {
   const handleDeleteService = async (serviceId: number) => {
     if (confirm('آیا مطمئن هستید که می‌خواهید این خدمت را حذف کنید؟')) {
       try {
+        const formData = new FormData()
+        formData.append('action', 'delete')
+        formData.append('serviceId', serviceId.toString())
+        
         const response = await fetch('/api/admin/services', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
             'Authorization': 'Bearer garage-admin-2024-secure-key-12345'
           },
-          body: JSON.stringify({
-            action: 'delete',
-            serviceId: serviceId
-          })
+          body: formData
         })
 
         if (response.ok) {
@@ -2428,11 +2425,11 @@ export default function AdminDashboard() {
                 {galleryImages?.map((image) => (
                   <div key={image.id} className="glass-card-dark overflow-hidden">
                     <div className="aspect-square bg-gradient-to-br from-primary-100/20 to-secondary-100/20 flex items-center justify-center relative">
-                      {(image.imageUrl || image.image) ? (
+                      {(image.image || image.imageUrl) ? (
                         <>
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img 
-                            src={image.imageUrl || image.image} 
+                            src={image.image || image.imageUrl} 
                             alt={image.title || 'تصویر گالری'}
                             className="w-full h-full object-cover"
                           />
