@@ -2,7 +2,7 @@
   "enabled": true,
   "interval": "daily",
   "postsPerRun": 2,
-  "lastRun": "2025-09-14T08:00:00.000Z",
+  "lastRun": "2025-09-13T00:00:00.000Z",
   "scheduleTime": "09:00",
   "timezone": "Asia/Tehran",
   "topics": [
